@@ -1,3 +1,4 @@
-site_name: Aliyun 计算巢 x Demo
-theme: 
+site_name: Aliyun 计算巢 x wordpress-acs-helm-demo
+theme:
   name: aliyuncomputenest
+docs_dir: .computenest/docs
