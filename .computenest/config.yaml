@@ -1,0 +1,36 @@
+Service:
+  RegionId: cn-hangzhou
+  DeployType: ros
+  DeployMetadata:
+    ServiceInstanceNameRule:
+      Prefix: spring-boot-
+    SupplierDeployMetadata:
+      HelmChartArtifactRelation:
+        '{{ computenest::helmchart::wordpress }}':
+          ArtifactId: ${Artifact.Artifact_1.ArtifactId}
+          ArtifactVersion: ${Artifact.Artifact_1.ArtifactVersion}
+    TemplateConfigs:
+      - Name: 新建acs部署helm chart模版
+        Url: 'ros_templates/template.yaml'
+        AllowedRegions: []
+  ServiceType: private
+  ServiceInfo:
+    Locale: zh-CN
+    ShortDescription: wordpress demo，新建acs集群，并以helm chart的方式部署wordpress应用
+    Image: 'resources/icons/service_logo.png'
+    Name: Wordpress服务示例(acs+helm版本)
+  ShareType: Public
+  ApprovalType: Manual
+Artifact:
+  Artifact_1:
+    ArtifactType: HelmChart
+    ArtifactName: wordpress
+    Description: wordpress HelmChart部署物
+    ArtifactProperty:
+      RepoName: ${HelmChartBuilder.HelmChart_1.RepoName}
+      Tag: ${HelmChartBuilder.HelmChart_1.Tag}
+HelmChartBuilder:
+  HelmChart_1:
+    HelmChartPath: 'resources/artifact_resources/helm_chart/wordpress-15.4.1.tgz'
+    RepoName: wordpress
+    Tag: 15.4.1

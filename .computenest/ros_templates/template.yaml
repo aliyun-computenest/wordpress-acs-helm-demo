@@ -1,0 +1,165 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Parameters:
+  ZoneId:
+    AssociationProperty: ZoneId
+    Required: true
+    Type: String
+    Description:
+      en: The zone ID.
+      zh-cn: 可用区
+  VpcId:
+    AssociationProperty: ALIYUN::ECS::VPC::VPCId
+    Type: String
+    Description:
+      en: VPC ID.
+      zh-cn: VpcId
+  VSwitchId:
+    Type: String
+    Label:
+      en: VSwitch ID
+      zh-cn: 交换机实例ID
+    Description:
+      en: Instance ID of existing business network switches, console-Virtual Private Cloud-VSwitches under query
+      zh-cn: 现有业务网络交换机的实例ID
+    AssociationProperty: ALIYUN::ECS::VSwitch::VSwitchId
+    AssociationPropertyMetadata:
+      VpcId: ${VpcId}
+      ZoneId: ${ZoneId}
+  ServiceCidr:
+    Type: String
+    Description:
+      zh-cn: 可选范围：10.0.0.0/16-24，172.16-31.0.0/16-24，192.168.0.0/16-24<br>不能与 VPC 及 VPC 内已有 Kubernetes 集群使用的网段重复。<font color='blue'><b>创建成功后不能修改</b></font>
+      en: 'Optional range: 10.0.0.0/16-24, 172.16-31.0.0/16-24, 192.168.0.0/16-24<br> cannot duplicate segments already used by existing Kubernetes clusters in VPC and VPC.<font color=''blue''><b>Cannot be modified after successful creation</b></font>'
+    Label:
+      zh-cn: Service CIDR
+      en: Service CIDR
+    AssociationProperty: ALIYUN::CS::ManagedKubernetesCluster::ServiceCidr
+    Default: 172.16.0.0/16
+  WordpressUsername:
+    Type: String
+    Label:
+      zh-cn: wordpress账户
+      en: wordpress username
+    Default: user
+  WordpressPassword:
+    NoEcho: true
+    Type: String
+    Label:
+      zh-cn: wordpress密码
+      en: wordpress password
+Resources:
+  AcsCluster:
+    Type: ALIYUN::ACS::Cluster
+    Properties:
+      Name:
+        Ref: ALIYUN::StackName
+      VpcId:
+        Ref: VpcId
+      ServiceCidr:
+        Ref: ServiceCidr
+      ClusterSpec: ack.pro.small
+      SnatEntry: true
+      VSwitchIds:
+        - Ref: VSwitchId
+      ZoneId:
+        Ref: ZoneId
+      PodVSwitchIds:
+        - Ref: VSwitchId
+      ServiceDiscoveryTypes:
+        - CoreDNS
+  WordpressComputenestHelmApplication:
+    Type: MODULE::ACS::ComputeNest::FluxOciHelmDeploy
+    Version: v1
+    Properties:
+      ClusterId:
+        Ref: ClusterId
+      HelmChartUrl: '{{ computenest::helmchart::wordpress }}'
+      DockerConfigJson: '{{ computenest::helm::dockerconfigjson }}'
+      ChartValues:
+        image:
+          registry: compute-nest-registry.cn-hangzhou.cr.aliyuncs.com
+          repository: bestpractice/wordpress
+          tag: 6.2.0
+        mariadb:
+          image:
+            registry: compute-nest-registry.cn-hangzhou.cr.aliyuncs.com
+            repository: bestpractice/mariadb
+            tag: 10.6.12
+          primary:
+            persistence:
+              enabled: true
+              storageClass: alicloud-disk-topology-alltype
+              size: 20Gi
+        persistence:
+          enabled: false
+        wordpressUsername:
+          Ref: WordpressUsername
+        wordpressPassword:
+          Ref: WordpressPassword
+      Namespace:
+        Ref: 'ALIYUN::StackName'
+      ReleaseName: wordpress
+      WaitUntil:
+        - Kind: Service
+          Name: wordpress
+          Namespace:
+            Ref: ALIYUN::StackName
+          JsonPath: $.status.loadBalancer.ingress[0].ip
+          Operator: NotEmpty
+          FirstMatch: true
+          Timeout: 300
+  # 获取service信息，输出到output中
+  ClusterApplicationResources:
+    Type: DATASOURCE::CS::ClusterApplicationResources
+    DependsOn:
+      - WordpressComputenestHelmApplication
+    Properties:
+      ClusterId:
+        Ref: ClusterId
+      Kind: Service
+      Name: wordpress
+      Namespace:
+        Ref: ALIYUN::StackName
+      JsonPath: $.status.loadBalancer.ingress[0].ip
+      FirstMatch: true
+Outputs:
+  # 将公网ip做为http返回的地址显示在控制台
+  BlogPageUrl:
+    Description:
+      zh-cn: Blog页面url
+      en: Blog Page URL
+    Value:
+      Fn::Sub:
+        - "http://${ServerAddress}"
+        - ServerAddress:
+            Fn::GetAtt:
+              - ClusterApplicationResources
+              - Response
+  BlogAdminUrl:
+    Description:
+      zh-cn: Blog后台url
+      en: Blog Admin URL
+    Value:
+      Fn::Sub:
+        - "http://${ServerAddress}/admin"
+        - ServerAddress:
+            Fn::GetAtt:
+              - ClusterApplicationResources
+              - Response
+Metadata:
+  ALIYUN::ROS::Interface:
+    ParameterGroups:
+      - Parameters:
+          - ZoneId
+          - VpcId
+          - VSwitchId
+          - ServiceCidr
+        Label:
+          en: Acs config
+          zh-cn: Acs配置
+      - Parameters:
+          - WordpressUsername
+          - WordpressPassword
+        Label:
+          en: Wordpress Configuration
+          zh-cn: Wordpress配置
