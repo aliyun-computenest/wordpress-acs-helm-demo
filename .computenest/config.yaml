@@ -24,7 +24,7 @@ Service:
 Artifact:
   Artifact_1:
     ArtifactType: HelmChart
-    ArtifactName: wordpress
+    ArtifactName: wordpress-helm
     Description: wordpress HelmChart部署物
     ArtifactProperty:
       RepoName: ${HelmChartBuilder.HelmChart_1.RepoName}
