@@ -72,7 +72,9 @@ Resources:
     Version: v1
     Properties:
       ClusterId:
-        Ref: ClusterId
+        Fn::GetAtt:
+          - AcsCluster
+          - ClusterId
       HelmChartUrl: '{{ computenest::helmchart::wordpress }}'
       DockerConfigJson: '{{ computenest::helm::dockerconfigjson }}'
       ChartValues:
@@ -115,7 +117,9 @@ Resources:
       - WordpressComputenestHelmApplication
     Properties:
       ClusterId:
-        Ref: ClusterId
+        Fn::GetAtt:
+          - AcsCluster
+          - ClusterId
       Kind: Service
       Name: wordpress
       Namespace:
