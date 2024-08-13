@@ -3,7 +3,7 @@ Service:
   DeployType: ros
   DeployMetadata:
     ServiceInstanceNameRule:
-      Prefix: wordPress-
+      Prefix: wordpress-
     SupplierDeployMetadata:
       HelmChartArtifactRelation:
         '{{ computenest::helmchart::wordpress }}':
