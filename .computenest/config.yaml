@@ -24,7 +24,7 @@ Service:
 Artifact:
   Artifact_1:
     ArtifactType: HelmChart
-    ArtifactName: wordpress-chart
+    ArtifactName: wordpress
     Description: wordpress HelmChart部署物
     ArtifactProperty:
       RepoName: ${HelmChartBuilder.HelmChart_1.RepoName}
@@ -32,5 +32,5 @@ Artifact:
 HelmChartBuilder:
   HelmChart_1:
     HelmChartPath: 'resources/artifact_resources/helm_chart/wordpress-15.4.1.tgz'
-    RepoName: wordpress-chart
+    RepoName: wordpress
     Tag: 15.4.1
