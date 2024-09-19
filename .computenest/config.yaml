@@ -13,6 +13,7 @@ Service:
       - Name: 新建acs部署helm chart模版
         Url: 'ros_templates/template.yaml'
         AllowedRegions: []
+        ArchitectureDiagramUrl: 'docs/architecture.png'
   ServiceType: private
   ServiceInfo:
     Locale: zh-CN
