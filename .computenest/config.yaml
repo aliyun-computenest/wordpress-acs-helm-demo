@@ -10,26 +10,33 @@ Service:
           ArtifactId: ${Artifact.Artifact_1.ArtifactId}
           ArtifactVersion: ${Artifact.Artifact_1.ArtifactVersion}
     TemplateConfigs:
-      - Name: 新建acs部署helm chart模版
+      - Name: 容器集群
         Url: 'ros_templates/template.yaml'
         AllowedRegions: []
         ArchitectureDiagramUrl: 'docs/architecture.png'
   ServiceType: private
   ServiceInfo:
     Locale: zh-CN
-    ShortDescription: wordpress demo，新建acs集群，并以helm chart的方式部署wordpress应用
+    ShortDescription: wordpress demo，在容器集群上以helm chart的方式部署wordpress应用
     Image: 'resources/icons/service_logo.png'
-    Name: Wordpress服务示例(acs+helm版本)
+    Name: Wordpress服务示例(容器集群+helm版本)
   ShareType: Public
   ApprovalType: Manual
+  UpgradeMetadata:
+    Description: 升级
+    SupportRollback: true
+    UpgradeComponents:
+      - Configuration
+      - Resource
 Artifact:
   Artifact_1:
     ArtifactType: HelmChart
-    ArtifactName: wordpress
+    ArtifactName: HelmChart-Wordpress
     Description: wordpress HelmChart部署物
     ArtifactProperty:
       RepoName: ${HelmChartBuilder.HelmChart_1.RepoName}
       Tag: ${HelmChartBuilder.HelmChart_1.Tag}
+      RepoType: Public
 HelmChartBuilder:
   HelmChart_1:
     HelmChartPath: 'resources/artifact_resources/helm_chart/wordpress-15.4.1.tgz'
