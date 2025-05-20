@@ -302,36 +302,6 @@ Parameters:
           Fn::Equals:
             - ${CsOptions}
             - NewAck
-  WorkerSystemDiskCategory:
-    Type: String
-    Default: null
-    Required: true
-    AssociationProperty: ALIYUN::ECS::Disk::SystemDiskCategory
-    AssociationPropertyMetadata:
-      RegionId: ${RegionId}
-      ZoneId: ${ZoneId}
-      InstanceType: ${WorkerInstanceType}
-      Visible:
-        Condition:
-          Fn::Equals:
-            - ${CsOptions}
-            - NewAck
-    Label:
-      en: Worker System Disk Category
-      zh-cn: Worker 系统盘磁盘类型
-  WorkerSystemDiskSize:
-    Type: Number
-    Label:
-      en: Worker System Disk Size(GB)
-      zh-cn: Worker节点系统盘大小(GB)
-    MinValue: 1
-    Default: 120
-    AssociationPropertyMetadata:
-      Visible:
-        Condition:
-          Fn::Equals:
-            - ${CsOptions}
-            - NewAck
   AckNetworkPlugin:
     Type: String
     Label:
@@ -481,10 +451,8 @@ Resources:
         Ref: WorkerInstanceCount
       WorkerInstanceTypes:
         - Ref: WorkerInstanceType
-      WorkerSystemDiskCategory:
-        Ref: WorkerSystemDiskCategory
-      WorkerSystemDiskSize:
-        Ref: WorkerSystemDiskSize
+      WorkerSystemDiskCategory: cloud_essd
+      WorkerSystemDiskSize: 120
       LoginPassword:
         Ref: LoginPassword
   WordpressComputenestHelmApplication:
@@ -576,8 +544,6 @@ Metadata:
       - Parameters:
           - WorkerInstanceType
           - WorkerInstanceCount
-          - WorkerSystemDiskCategory
-          - WorkerSystemDiskSize
           - LoginPassword
           - AckNetworkPlugin
           - PodCidr

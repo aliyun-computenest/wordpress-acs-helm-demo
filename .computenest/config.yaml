@@ -12,7 +12,29 @@ Service:
     TemplateConfigs:
       - Name: 容器集群
         Url: 'ros_templates/template.yaml'
-        AllowedRegions: []
+        AllowedRegions:
+          - cn-hangzhou
+          - cn-shanghai
+          - cn-qingdao
+          - cn-beijing
+          - cn-huhehaote
+          - cn-wulanchabu
+          - cn-shenzhen
+          - cn-heyuan
+          - cn-guangzhou
+          - cn-chengdu
+          - cn-hongkong
+          - ap-southeast-1
+          - ap-northeast-2
+          - ap-southeast-3
+          - ap-southeast-5
+          - ap-northeast-1
+          - eu-central-1
+          - eu-west-1
+          - us-west-1
+          - us-east-1
+          - ap-southeast-6
+          - ap-southeast-7
         ArchitectureDiagramUrl: 'docs/architecture.png'
   ServiceType: private
   ServiceInfo:
