@@ -4,6 +4,6 @@
     <option name="branch" value="main" />
     <option name="gitUrl" value="https://github.com/aliyun-computenest/wordpress-acs-helm-demo.git" />
     <option name="localBranch" value="main" />
-    <option name="revision" value="56fce2e661e72a82ca6fb0f6030f52b943355a5b" />
+    <option name="revision" value="6a38160d76ff5795d7de027c64d960a1ad43c0db" />
   </component>
 </project>

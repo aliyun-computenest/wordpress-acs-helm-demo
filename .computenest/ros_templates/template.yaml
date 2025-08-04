@@ -376,6 +376,14 @@ Parameters:
     Label:
       zh-cn: wordpress密码
       en: wordpress password
+  KubernetesVersion:
+    Type: String
+    Label:
+      zh-cn: Kubernetes版本
+      en: Kubernetes Version
+    AssociationProperty: ALIYUN::CS::Cluster::KubernetesVersion
+    AssociationPropertyMetadata:
+      AutoSelectFirst: true
 Conditions:
   CreateClusterCondition:
     Fn::Or:
@@ -413,6 +421,8 @@ Resources:
     Type: MODULE::ACS::ComputeNest::AckOrAcsCluster
     Version: default
     Properties:
+      KubernetesVersion:
+        Ref: KubernetesVersion
       CsOptions:
         Ref: CsOptions
       ClusterId:
@@ -544,6 +554,7 @@ Metadata:
       - Parameters:
           - WorkerInstanceType
           - WorkerInstanceCount
+          - KubernetesVersion
           - LoginPassword
           - AckNetworkPlugin
           - PodCidr
