@@ -384,6 +384,12 @@ Parameters:
     AssociationProperty: ALIYUN::CS::Cluster::KubernetesVersion
     AssociationPropertyMetadata:
       AutoSelectFirst: true
+      Visible:
+        Condition:
+          Fn::Not:
+            Fn::Equals:
+              - ${CsOptions}
+              - ExistCs
 Conditions:
   CreateClusterCondition:
     Fn::Or:
