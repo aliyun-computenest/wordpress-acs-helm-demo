@@ -382,6 +382,7 @@ Parameters:
       zh-cn: Kubernetes版本
       en: Kubernetes Version
     AssociationProperty: ALIYUN::CS::Cluster::KubernetesVersion
+    Default: null
     AssociationPropertyMetadata:
       AutoSelectFirst: true
       Visible:
