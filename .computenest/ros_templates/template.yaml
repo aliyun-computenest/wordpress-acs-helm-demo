@@ -425,7 +425,7 @@ Resources:
   AckOrAcsClusterModule:
     DependsOn:
       - VpcModule
-    Type: MODULE::ACS::ComputeNest::AckOrAcsCluster
+    Type: MODULE::SHARE::1853370294850618::AckOrAcsCluster
     Version: default
     Properties:
       KubernetesVersion:
@@ -473,7 +473,7 @@ Resources:
       LoginPassword:
         Ref: LoginPassword
   WordpressComputenestHelmApplication:
-    Type: MODULE::ACS::ComputeNest::FluxOciHelmDeploy
+    Type: MODULE::SHARE::1853370294850618::FluxOciHelmDeploy
     Version: default
     Properties:
       ClusterId:
